@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Drum Set</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+    <div class="keys">
+        <div data-key="81" class="key">
+            <kbd>Q</kbd>
+            <span class ="sound">kick</span>
+        </div>
+        <div data-key="87" class="key">
+            <kbd>w</kbd>
+            <span class ="sound">boom</span>
+        </div>
+        <div data-key="69" class="key">
+            <kbd>e</kbd>
+            <span class ="sound">snare</span>
+        </div>
+        <div data-key="82" class="key">
+            <kbd>r</kbd>
+            <span class ="sound">tom</span>
+        </div>
+        <div data-key="89" class="key">
+            <kbd>y</kbd>
+            <span class="sound">clap</span>
+        </div>
+        <div data-key="85" class="key">
+            <kbd>u</kbd>
+            <span class="sound">hihat</span>
+        </div>
+        <div data-key="73" class="key">
+            <kbd>i</kbd>
+            <span class="sound">openhat</span>
+        </div>
+        <div data-key="79" class="key">
+            <kbd>o</kbd>
+            <span class="sound">ride</span>
+        </div>
+        <div data-key="80" class="key">
+            <kbd>p</kbd>
+            <span class="sound">tink</span>
+        </div>
+    </div>
+
+    <audio data-key="81" src="sounds/kick.wav"></audio>
+    <audio data-key="87" src="sounds/boom.wav"></audio>
+    <audio data-key="69" src="sounds/snare.wav"></audio>
+    <audio data-key="82" src="sounds/tom.wav"></audio>
+    <audio data-key="89" src="sounds/clap.wav"></audio>
+    <audio data-key="85" src="sounds/hihat.wav"></audio>
+    <audio data-key="73" src="sounds/openhat.wav"></audio>
+    <audio data-key="79" src="sounds/ride.wav"></audio>
+    <audio data-key="80" src="sounds/tink.wav"></audio>
+
+    <script>
+            function playSound(e) {
+              const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); //Check for audio element on page which has a data-key of 65 - using query selector rather than all as its only 1, using attribute selector [date-key=${}]
+              const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);  //selects the class key
+              if(!audio) return; //Stop the function from running all together if no audio on key press
+              audio.currentTime = 0; //rewind to start
+              audio.play(); //plays audio
+              key.classList.add('playing'); //adds class playing - so in this case it will add the animation
+            }
+            
+            function removeTransition(e) {
+              if(e.propertyName !== 'transform') return; // skip if its not a transform
+              this.classList.remove('playing');
+            }
+            
+            const keys = document.querySelectorAll('.key');
+            keys.forEach(key => key.addEventListener('transitionend', removeTransition)); // listen for 'transitionend' when it ends, run function 'removeTransition', each key gets eventListener added, which is transitionend, when it is ending we will rmeove it
+            window.addEventListener('keydown', playSound);
+            </script>
+</body>
+
+</html>
